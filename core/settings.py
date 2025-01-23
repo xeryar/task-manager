@@ -10,28 +10,95 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
+from datetime import timedelta
 from pathlib import Path
 
 from decouple import config
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# ---------------------------------------------------------------------------- #
+#                                SYSTEM_SETTINGS                               #
+# ---------------------------------------------------------------------------- #
 BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_ROOT = BASE_DIR / "static"
+STATIC_URL = "/static/"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEBUG = True if config("ENV") != "production" else False  #! SECURITY WARNING: don't run with debug turned on in production!
+ROOT_URLCONF = "core.urls"
+WSGI_APPLICATION = "core.wsgi.application"
+
+try:
+    SECRET_KEY = config("APP_KEY")  #! SECURITY WARNING: keep the secret key used in production secret!
+
+    if not SECRET_KEY:
+        os.environ["SIGN_KEY_DJANGO"] = SECRET_KEY  # type: ignore
+        print("### >> Please specify 'APP_KEY' value before proceeding forward!!")
+        exit(0)
+except:
+    print("### >> Please specify 'APP_KEY' variable in '.env' before proceeding forward!!")
+    exit(0)
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# ---------------------------------------------------------------------------- #
+#                                     AUTH                                     #
+# ---------------------------------------------------------------------------- #
+ACCESS_TOKEN_VALIDITY = int(config("ACCESS_TOKEN_VALIDITY")) if config("ACCESS_TOKEN_VALIDITY") else 60
+REFRESH_TOKEN_VALIDITY = int(config("REFRESH_TOKEN_VALIDITY")) if config("REFRESH_TOKEN_VALIDITY") else 1
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-))arbk&)(u^st^dx47k0cxm&^2hr*wv%)23shra0vl1m$moa4%"
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=ACCESS_TOKEN_VALIDITY),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=REFRESH_TOKEN_VALIDITY),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": SECRET_KEY,
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "JTI_CLAIM": "jti",
+    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+}
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# ---------------------------------------------------------------------------- #
+#                                     CORS                                     #
+# ---------------------------------------------------------------------------- #
 ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = True
+
+# ---------------------------------------------------------------------------- #
+#                                     SILK                                     #
+# ---------------------------------------------------------------------------- #
+SILKY_PYTHON_PROFILER = False
+SILKY_PYTHON_PROFILER_BINARY = False
+SILKY_META = False
+SILKY_PYTHON_PROFILER_RESULT_PATH = "profiling"
+
+if not os.path.exists(SILKY_PYTHON_PROFILER_RESULT_PATH):
+    os.mkdir(SILKY_PYTHON_PROFILER_RESULT_PATH)
 
 
-# Application definition
+# ---------------------------------------------------------------------------- #
+#                                INTERNALIZATION                               #
+# ---------------------------------------------------------------------------- #
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
+USE_I18N = True
+USE_TZ = 1
 
+
+# ---------------------------------------------------------------------------- #
+#                                     APPS                                     #
+# ---------------------------------------------------------------------------- #
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -43,13 +110,15 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
-    "apps.user",
 ]
 if DEBUG:
     INSTALLED_APPS += [
         "silk",
     ]
 
+# ---------------------------------------------------------------------------- #
+#                                  MIDDLEWARES                                 #
+# ---------------------------------------------------------------------------- #
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -64,8 +133,32 @@ if DEBUG:
         "silk.middleware.SilkyMiddleware",
     ]
 
-ROOT_URLCONF = "core.urls"
+# ---------------------------------------------------------------------------- #
+#                                REST_FRAMEWORK                                #
+# ---------------------------------------------------------------------------- #
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 50,
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+}
 
+if DEBUG:
+    # ? These permission classes are required for the browsable API, but they are not required for production.
+    REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] += (
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    )
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ]
+
+# ---------------------------------------------------------------------------- #
+#                                   TEMPLATES                                  #
+# ---------------------------------------------------------------------------- #
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -82,12 +175,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# ---------------------------------------------------------------------------- #
+#                            DATABASE CONFIGURATION                            #
+# ---------------------------------------------------------------------------- #
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
@@ -96,15 +187,13 @@ DATABASES = {
         "PASSWORD": config("DB_PASSWORD"),
         "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT"),
-        # "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
-        # "ATOMIC_REQUESTS": True,
     }
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+# ---------------------------------------------------------------------------- #
+#                                  VALIDATORS                                  #
+# ---------------------------------------------------------------------------- #
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -119,26 +208,3 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
-LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = "static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

@@ -12,12 +12,7 @@ class CustomUserManager(UserManager):
     Custom user manager where email is the unique identifier, inherited from UserManager provided by auth
     """
 
-    def create_superuser(
-        self,
-        email: str,
-        password: str | None,
-        **extra_fields: Any,
-    ) -> Any:
+    def create_superuser(self, email: str, password: str | None, **extra_fields: Any) -> Any:
         username = email
         return super().create_superuser(username, email, password, **extra_fields)
 

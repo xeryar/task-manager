@@ -26,6 +26,8 @@ class UserProfile(BaseModel, AbstractUser):
     """
     User profile model where email is the unique identifier, inherited from abstract user provided by auth
 
+    role: FK (Role)
+
     id (PK): AutoField
     username: CharField
     email: EmailField
@@ -39,6 +41,8 @@ class UserProfile(BaseModel, AbstractUser):
 
     is_verified: BooleanField
     """
+
+    role = models.ForeignKey("user.Role", on_delete=models.PROTECT, null=True, blank=True, related_name="user_roles")
 
     username = models.CharField(_("username"), max_length=150, blank=True)
     email = models.EmailField(_("email address"), unique=True)

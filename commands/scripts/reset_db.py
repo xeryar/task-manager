@@ -19,6 +19,7 @@ settings.configure(
 )
 
 database_name = settings.DATABASES["default"]["NAME"]
+settings.DATABASES["default"]["NAME"] = ""
 connection = connections["default"]
 
 # Check if the schema exists
@@ -37,3 +38,5 @@ if database_name in existing_schemas:
 with connection.cursor() as cursor:
     cursor.execute(f"CREATE DATABASE {database_name}")
     print(f"Database '{database_name}' created")
+
+settings.DATABASES["default"]["NAME"] = database_name

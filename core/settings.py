@@ -44,6 +44,7 @@ except:
 # ---------------------------------------------------------------------------- #
 ACCESS_TOKEN_VALIDITY = int(config("ACCESS_TOKEN_VALIDITY")) if config("ACCESS_TOKEN_VALIDITY") else 60
 REFRESH_TOKEN_VALIDITY = int(config("REFRESH_TOKEN_VALIDITY")) if config("REFRESH_TOKEN_VALIDITY") else 1
+AUTH_USER_MODEL = "user.UserProfile"
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=ACCESS_TOKEN_VALIDITY),

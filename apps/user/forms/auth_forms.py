@@ -6,12 +6,17 @@ from apps.user.models.user_models import UserProfile
 
 class UserRegistrationForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput, label="Confirm Password", required=True)
+    password = forms.CharField(widget=forms.PasswordInput, label="Password", required=True)
 
     class Meta:
         model = UserProfile
-        fields = ["email", "first_name", "last_name", "password", "confirm_password"]
-
-    password = forms.CharField(widget=forms.PasswordInput, label="Password", required=True)
+        fields = [
+            "email",
+            "first_name",
+            "last_name",
+            "password",
+            "confirm_password",
+        ]
 
     def clean(self):
         cleaned_data = super().clean()

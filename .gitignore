@@ -6,3 +6,4 @@ migrations
 allstatic
 .DS_Store
 *.prof
+my_lab

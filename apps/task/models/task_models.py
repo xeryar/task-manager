@@ -19,6 +19,15 @@ class Project(BaseModel):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def get_detailed_queryset(cls):
+        return cls.objects.prefetch_related("project_tasks").annotate(
+            total_tasks=models.Count("project_tasks"),
+            pending_tasks=models.Count("project_tasks", filter=models.Q(project_tasks__status="pending")),
+            in_progress_tasks=models.Count("project_tasks", filter=models.Q(project_tasks__status="in_progress")),
+            completed_tasks=models.Count("project_tasks", filter=models.Q(project_tasks__status="completed")),
+        )
+
 
 class Task(BaseModel):
     """

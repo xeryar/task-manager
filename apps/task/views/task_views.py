@@ -1,5 +1,4 @@
 from django.db import transaction
-from django.db.models import Count, Prefetch, Q
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -24,12 +23,7 @@ class ProjectViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.action == "retrieve":
-            queryset = queryset.prefetch_related(Prefetch("project_tasks", queryset=Task.objects.all().order_by("-id"))).annotate(
-                total_tasks=Count("project_tasks"),
-                pending_tasks=Count("project_tasks", filter=Q(project_tasks__status="pending")),
-                in_progress_tasks=Count("project_tasks", filter=Q(project_tasks__status="in_progress")),
-                completed_tasks=Count("project_tasks", filter=Q(project_tasks__status="completed")),
-            )
+            queryset = Project.get_detailed_queryset()
         return queryset
 
     @transaction.atomic

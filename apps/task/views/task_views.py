@@ -3,7 +3,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from apps.task.filters.task_filters import TaskFilterBackend
+from apps.task.filters.task_filters import TaskFilter
 from apps.task.forms.task_forms import ProjectForm, TaskForm
 from apps.task.models.task_models import Project, Task
 from apps.task.serializers.task_serializers import ProjectSerializer, TaskSerializer
@@ -54,7 +54,7 @@ class ProjectViewSet(ModelViewSet):
 class TaskViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    filter_backends = [TaskFilterBackend, OrderingFilter]
+    filter_backends = [TaskFilter, OrderingFilter]
     ordering_fields = ["id", "title", "due_date", "priority", "status"]
     ordering = ["-id"]
     http_method_names = ["get", "post", "put", "delete"]

@@ -4,7 +4,7 @@ from django.db.models import Q
 from rest_framework import filters
 
 
-class TaskFilterBackend(filters.BaseFilterBackend):
+class TaskFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         title = request.query_params.get("title")
         due_date = request.query_params.get("due_date")

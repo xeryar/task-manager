@@ -86,3 +86,9 @@ class TaskViewSet(ModelViewSet):
             serializer = self.get_serializer(task)
             return Response(serializer.data)
         return make_error_response(data=form.errors)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.is_completed:
+            return make_forbidden_response(message="You cannot delete a completed task.")
+        return super().destroy(request, *args, **kwargs)

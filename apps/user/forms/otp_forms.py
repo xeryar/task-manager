@@ -1,10 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.timezone import now
 
 from apps.user.helpers.user_helper_functions import send_otp_via_thread, set_user_otp
 from apps.user.models.user_models import UserProfile
-from utils.common_utils import generate_otp
 
 
 class OTPVerificationForm(forms.Form):

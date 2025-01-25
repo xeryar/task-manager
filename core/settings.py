@@ -113,6 +113,7 @@ INSTALLED_APPS = [
     "django_filters",
     # system
     "apps.user",
+    "apps.task",
 ]
 if DEBUG:
     INSTALLED_APPS += [

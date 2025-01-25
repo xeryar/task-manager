@@ -18,6 +18,20 @@ def make_success_response(data: dict[str, Any] | list[Any] | dict[int, Any] | No
     )
 
 
+def make_created_response(data: dict[str, Any] | list[Any] | dict[int, Any] | None = None, message: str = "") -> Response:
+    """
+    Make a created response with 201 status code. The message is optional and will be empty by default.
+    """
+    return Response(
+        {
+            "status": "created",
+            "message": message,
+            "data": data,
+        },
+        status=status.HTTP_201_CREATED,
+    )
+
+
 def make_error_response(data: dict[str, Any] | list[Any] | dict[int, Any] | None = None, message: str = "") -> Response:
     """
     Make a error response with 400 status code. The message is optional and will be empty by default.

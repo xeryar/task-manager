@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.task.filters.task_filters import TaskFilter
 from apps.task.forms.task_forms import ProjectForm, TaskForm
+from apps.task.helpers.task_helpers import validate_task_access
 from apps.task.models.task_models import Project, Task
 from apps.task.serializers.task_serializers import ProjectSerializer, TaskSerializer
 from utils.response_utils import (
@@ -80,18 +81,31 @@ class TaskViewSet(ModelViewSet):
             return make_created_response(data=serializer.data)
         return make_error_response(data=form.errors)
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        invalid_response = validate_task_access(request, instance)
+        if invalid_response:
+            return invalid_response["response"]
+        return super().retrieve(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        request_user = request.user
+        request_user_role = request_user.role.name.lower()
+
+        if request_user_role == "user":
+            queryset = self.filter_queryset(self.get_queryset())
+            self.queryset = queryset.filter(assigned_to=request.user)
+        return super().list(request, *args, **kwargs)
+
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         request_data = request.data
         instance = self.get_object()
-        request_user = request.user
-        request_user_role = request_user.role.name.lower()
-
+        invalid_response = validate_task_access(request, instance)
+        if invalid_response:
+            return invalid_response["response"]
         if request_data.get("status") == "completed" and request_user_role != "manager":
             return make_forbidden_response(message="You do not have permission to mark a task as completed.")
-        if request_user_role not in ["admin", "manager"] and instance.assigned_to_id != request_user.id:
-            return make_forbidden_response(message="You do not have permission to update this task.")
-
         form = TaskForm(request.data, instance=instance, initial={"user_role": request_user_role})
         if form.is_valid():
             task = form.save()
@@ -101,6 +115,9 @@ class TaskViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
+        invalid_response = validate_task_access(request, instance)
+        if invalid_response:
+            return invalid_response["response"]
         if instance.is_completed:
             return make_forbidden_response(message="You cannot delete a completed task.")
         return super().destroy(request, *args, **kwargs)

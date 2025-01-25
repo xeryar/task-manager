@@ -14,6 +14,18 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     http_method_names = ["get", "post", "put", "delete"]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        if self.action == "retrieve":
+            context["get_tasks"] = True
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action == "retrieve":
+            queryset = Project.get_detailed_queryset()
+        return queryset
+
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         form = ProjectForm(request.data)

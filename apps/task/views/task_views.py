@@ -10,6 +10,7 @@ from apps.task.serializers.task_serializers import ProjectSerializer, TaskSerial
 class ProjectViewSet(ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    http_method_names = ["get", "post", "put", "delete"]
 
     def create(self, request, *args, **kwargs):
         form = ProjectForm(request.data)
@@ -20,7 +21,6 @@ class ProjectViewSet(ModelViewSet):
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
         instance = self.get_object()
         form = ProjectForm(request.data, instance=instance)
         if form.is_valid():
@@ -33,6 +33,7 @@ class ProjectViewSet(ModelViewSet):
 class TaskViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    http_method_names = ["get", "post", "put", "delete"]
 
     def create(self, request, *args, **kwargs):
         form = TaskForm(request.data)
@@ -43,7 +44,6 @@ class TaskViewSet(ModelViewSet):
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
         instance = self.get_object()
         form = TaskForm(request.data, instance=instance)
         if form.is_valid():

@@ -48,3 +48,7 @@ class Task(BaseModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def is_completed(self):
+        return self.status == "completed"

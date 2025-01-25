@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from core.models import BaseModel
+from utils.datetime_utils import convert_any_datetime_to_utc, get_current_utc_datetime
 
 
 class CustomUserManager(UserManager):
@@ -60,3 +61,13 @@ class UserProfile(BaseModel, AbstractUser):
 
     def __str__(self):
         return self.email
+
+    @property
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def is_otp_expired(self):
+        if self.otp_expiry:
+            return convert_any_datetime_to_utc(self.otp_expiry) < get_current_utc_datetime()
+        return True

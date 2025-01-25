@@ -37,7 +37,7 @@ class ProjectViewSet(ModelViewSet):
         if form.is_valid():
             project = form.save()
             serializer = self.get_serializer(project)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return make_created_response(data=serializer.data)
         return make_error_response(data=form.errors)
 
     @transaction.atomic

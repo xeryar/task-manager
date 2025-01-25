@@ -10,7 +10,6 @@ class IsAuthenticated(BasePermission):
 
     def has_permission(self, request, view):
         request_user = request.user
-        user_role = request_user.role
         request_method = request.method.lower()
         request_path = request.path.replace("/api", "")
 
@@ -19,6 +18,10 @@ class IsAuthenticated(BasePermission):
 
         if request_user.is_superuser:
             return True
+
+        user_role = request_user.role
+        if not user_role:
+            return False
 
         return validate_resources(request_method, request_path, user_role)
 

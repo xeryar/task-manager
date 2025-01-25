@@ -59,6 +59,18 @@ class TaskViewSet(ModelViewSet):
     ordering = ["-id"]
     http_method_names = ["get", "post", "put", "delete"]
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action == "retrieve":
+            queryset = queryset.select_related("project")
+        return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        if self.action == "retrieve":
+            context["get_project"] = True
+        return context
+
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         form = TaskForm(request.data)

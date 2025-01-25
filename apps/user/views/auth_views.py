@@ -1,5 +1,5 @@
 from django.db import transaction
-from rest_framework import status, views, viewsets
+from rest_framework import views, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -12,6 +12,11 @@ from rest_framework_simplejwt.views import (
 from apps.user.forms.auth_forms import UserRegistrationForm
 from apps.user.forms.otp_forms import OTPVerificationForm, ResendOTPForm
 from apps.user.models.user_models import UserProfile
+from utils.response_utils import (
+    make_created_response,
+    make_error_response,
+    make_success_response,
+)
 
 
 class RegisterApiView(views.APIView):
@@ -22,14 +27,8 @@ class RegisterApiView(views.APIView):
         form = UserRegistrationForm(request.data)
         if form.is_valid():
             form.save()
-            return Response(
-                {
-                    "message": "Success",
-                    "message": "User registered successfully! Please verify via OTP sent to your email to activate your account.",
-                },
-                status=status.HTTP_201_CREATED,
-            )
-        return Response({"message": "Failed", "errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return make_created_response(message="User registered successfully. Please verify your email address.")
+        return make_error_response(data=form.errors)
 
 
 class LoginApiView(TokenObtainPairView):
@@ -40,9 +39,9 @@ class LoginApiView(TokenObtainPairView):
         email: str = request_data.get("email")  # type: ignore
         user = UserProfile.objects.filter(email=email).first()
         if not user:
-            return Response({"message": "Failed", "errors": {"email": "User not found"}}, status=status.HTTP_400_BAD_REQUEST)
+            return make_error_response(message="User not found.")
         if not (user.is_superuser or user.is_verified):
-            return Response({"message": "Failed", "errors": {"email": "User not verified"}}, status=status.HTTP_400_BAD_REQUEST)
+            return make_error_response(message="Your account is not verified. Please verify your email address.")
         return super().post(request, *args, **kwargs)
 
 
@@ -67,26 +66,14 @@ class OTPVerificationAPIViewSet(viewsets.ViewSet):
         form = OTPVerificationForm(request.data)
         if form.is_valid():
             form.save()
-            return Response(
-                {
-                    "status": "Success",
-                    "message": "Your account is now verified! Please login to continue.",
-                },
-                status=status.HTTP_200_OK,
-            )
+            return make_success_response(message="OTP verified successfully.")
 
-        return Response({"status": "Failed", "errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return make_error_response(data=form.errors)
 
     def resend_otp(self, request, *args, **kwargs):
         form = ResendOTPForm(request.data)
         if form.is_valid():
             form.save()
-            return Response(
-                {
-                    "status": "Success",
-                    "message": "A new OTP has been sent to your email address.",
-                },
-                status=status.HTTP_200_OK,
-            )
+            return make_success_response(message="OTP resent successfully.")
 
-        return Response({"status": "Failed", "errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return make_error_response(data=form.errors)

@@ -1,12 +1,17 @@
 from django.db import transaction
-from rest_framework import status
+from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from apps.task.filters.task_filters import TaskFilter
 from apps.task.forms.task_forms import ProjectForm, TaskForm
 from apps.task.models.task_models import Project, Task
 from apps.task.serializers.task_serializers import ProjectSerializer, TaskSerializer
-from utils.response_utils import make_forbidden_response
+from utils.response_utils import (
+    make_created_response,
+    make_error_response,
+    make_forbidden_response,
+)
 
 
 class ProjectViewSet(ModelViewSet):
@@ -32,8 +37,8 @@ class ProjectViewSet(ModelViewSet):
         if form.is_valid():
             project = form.save()
             serializer = self.get_serializer(project)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+            return make_created_response(data=serializer.data)
+        return make_error_response(data=form.errors)
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -43,12 +48,15 @@ class ProjectViewSet(ModelViewSet):
             project = form.save()
             serializer = self.get_serializer(project)
             return Response(serializer.data)
-        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+        return make_error_response(data=form.errors)
 
 
 class TaskViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    filter_backends = [TaskFilter, OrderingFilter]
+    ordering_fields = ["id", "title", "due_date", "priority", "status"]
+    ordering = ["-id"]
     http_method_names = ["get", "post", "put", "delete"]
 
     @transaction.atomic
@@ -57,8 +65,8 @@ class TaskViewSet(ModelViewSet):
         if form.is_valid():
             task = form.save()
             serializer = self.get_serializer(task)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+            return make_created_response(data=serializer.data)
+        return make_error_response(data=form.errors)
 
     @transaction.atomic
     def update(self, request, *args, **kwargs):
@@ -77,4 +85,4 @@ class TaskViewSet(ModelViewSet):
             task = form.save()
             serializer = self.get_serializer(task)
             return Response(serializer.data)
-        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+        return make_error_response(data=form.errors)

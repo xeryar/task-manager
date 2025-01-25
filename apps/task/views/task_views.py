@@ -1,4 +1,5 @@
 from django.db import transaction
+from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -100,6 +101,8 @@ class TaskViewSet(ModelViewSet):
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         request_data = request.data
+        request_user = request.user
+        request_user_role = request_user.role.name.lower()
         instance = self.get_object()
         invalid_response = validate_task_access(request, instance)
         if invalid_response:
@@ -121,3 +124,16 @@ class TaskViewSet(ModelViewSet):
         if instance.is_completed:
             return make_forbidden_response(message="You cannot delete a completed task.")
         return super().destroy(request, *args, **kwargs)
+
+    @action(detail=False, methods=["post"], url_path="approvals")
+    def task_approvals(self, request):
+        request_data = request.data
+        approved_tasks = request_data.get("approved_tasks", [])
+        rejected_tasks = request_data.get("rejected_tasks", [])
+        if not approved_tasks and not rejected_tasks:
+            return make_error_response(message="Please provide approved_tasks or rejected_tasks.")
+        if approved_tasks:
+            Task.objects.filter(id__in=approved_tasks).update(is_pending_approval=False, status="completed")
+        if rejected_tasks:
+            Task.objects.filter(id__in=rejected_tasks).update(is_pending_approval=False)
+        return make_created_response(message="Task approvals updated successfully.")

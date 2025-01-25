@@ -37,6 +37,7 @@ class TaskSerializer(BaseModelSerializer):
             "due_date",
             "priority",
             "status",
+            "is_pending_approval",
         ] + get_base_model_fields()
 
         read_only_fields = [

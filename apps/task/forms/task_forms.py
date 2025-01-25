@@ -34,6 +34,7 @@ class TaskForm(forms.ModelForm):
             "status",
             "assigned_to",
             "description",
+            "is_pending_approval",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -43,6 +44,8 @@ class TaskForm(forms.ModelForm):
         user_role = self._initial.get("user_role", None)
         if user_role and user_role not in ["admin", "manager"]:
             self.fields.pop("assigned_to")
+        if not (self.instance and self.instance.pk):
+            self.fields.pop("is_pending_approval")
 
     def clean_status(self):
         status = self.cleaned_data.get("status")
@@ -63,3 +66,11 @@ class TaskForm(forms.ModelForm):
         if due_date and due_date < get_current_utc_datetime():
             raise forms.ValidationError("The due date cannot be in the past.")
         return due_date
+
+    def clean_is_pending_approval(self):
+        is_pending_approval = self.cleaned_data.get("is_pending_approval")
+        if is_pending_approval and self.instance and self.instance.is_completed:
+            return is_pending_approval
+        if is_pending_approval and not self.instance.status == "in_progress":
+            raise forms.ValidationError("The task must be in progress to be pending approval.")
+        return is_pending_approval

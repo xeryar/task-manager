@@ -206,5 +206,18 @@
             "created_at": "2001-11-20T00:00:00Z",
             "updated_at": "2001-11-20T00:00:00Z"
         }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 17,
+        "fields": {
+            "name": "Approve Task",
+            "description": "Approve a task",
+            "regex": "^/tasks/approvals/$",
+            "method": "post",
+            "permission": 11,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
     }
 ]

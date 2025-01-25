@@ -41,6 +41,8 @@ class Task(BaseModel):
     due_date: DateTimeField
     priority: CharField (choices: low, medium, high)
     status: CharField (choices: pending, in_progress, completed) (default: pending)
+
+    is_pending_approval: BooleanField (default: False)
     """
 
     project = models.ForeignKey("task.Project", on_delete=models.CASCADE, related_name="project_tasks")
@@ -52,6 +54,8 @@ class Task(BaseModel):
     STATUS_CHOICES = [("pending", "Pending"), ("in_progress", "In Progress"), ("completed", "Completed")]
     priority = models.CharField(max_length=50, choices=PRIORITY_CHOICES, default="low", blank=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="pending", blank=True)
+
+    is_pending_approval = models.BooleanField(default=False)
 
     class Meta:
         app_label = "task"

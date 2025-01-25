@@ -8,8 +8,8 @@
             "regex": "^/register/$",
             "method": "post",
             "permission": null,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -21,8 +21,8 @@
             "regex": "^/login/$",
             "method": "post",
             "permission": null,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -34,8 +34,8 @@
             "regex": "^/token/refresh/$",
             "method": "post",
             "permission": null,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -47,8 +47,8 @@
             "regex": "^/logout/$",
             "method": "post",
             "permission": null,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -60,8 +60,8 @@
             "regex": "^/verify-otp/$",
             "method": "post",
             "permission": null,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -73,8 +73,8 @@
             "regex": "^/resend-otp/$",
             "method": "post",
             "permission": null,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -86,8 +86,8 @@
             "regex": "^/projects/$",
             "method": "get",
             "permission": 1,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -99,8 +99,8 @@
             "regex": "^/projects/[0-9]+/$",
             "method": "get",
             "permission": 2,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -112,8 +112,8 @@
             "regex": "^/projects/$",
             "method": "post",
             "permission": 3,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -125,8 +125,8 @@
             "regex": "^/projects/[0-9]+/$",
             "method": "put",
             "permission": 4,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -138,8 +138,8 @@
             "regex": "^/projects/[0-9]+/$",
             "method": "delete",
             "permission": 5,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -151,8 +151,8 @@
             "regex": "^/tasks/$",
             "method": "get",
             "permission": 6,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -164,8 +164,8 @@
             "regex": "^/tasks/[0-9]+/$",
             "method": "get",
             "permission": 7,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -177,8 +177,8 @@
             "regex": "^/tasks/$",
             "method": "post",
             "permission": 8,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -190,8 +190,8 @@
             "regex": "^/tasks/[0-9]+/$",
             "method": "put",
             "permission": 9,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     },
     {
@@ -203,8 +203,8 @@
             "regex": "^/tasks/[0-9]+/$",
             "method": "delete",
             "permission": 10,
-            "created_at": "1995-07-27T00:00:00Z",
-            "updated_at": "1995-07-27T00:00:00Z"
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
         }
     }
 ]

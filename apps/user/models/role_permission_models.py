@@ -38,6 +38,9 @@ class Role(BaseModel):
     class Meta:
         app_label = "user"
 
+    def __str__(self):
+        return self.name
+
 
 class Resource(BaseModel):
     """

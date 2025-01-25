@@ -223,3 +223,12 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = "Task Manager <no-reply@gmail.com>"
+
+
+# ---------------------------------------------------------------------------- #
+#                                   FIXTURES                                   #
+# ---------------------------------------------------------------------------- #
+FIXTURE_DIRS = [
+    BASE_DIR / "seeds",
+    BASE_DIR / "apps" / "user" / "seeds",
+]

@@ -23,7 +23,7 @@ class ProjectSerializer(BaseModelSerializer):
             self.fields["pending_tasks"] = serializers.IntegerField(read_only=True)
             self.fields["in_progress_tasks"] = serializers.IntegerField(read_only=True)
             self.fields["completed_tasks"] = serializers.IntegerField(read_only=True)
-            self.fields["tasks"] = TaskSerializer(many=True, read_only=True, source="project_tasks")
+            self.fields["tasks"] = TaskSerializer(many=True, read_only=True, source="project_tasks", context={"remove_project": True})
         super().__init__(*args, **kwargs)
 
 
@@ -42,3 +42,9 @@ class TaskSerializer(BaseModelSerializer):
         read_only_fields = [
             "id",
         ]
+
+    def __init__(self, *args, **kwargs):
+        self._context = kwargs.get("context", {})
+        if self._context.get("remove_project", False):
+            self.fields.pop("project")
+        super().__init__(*args, **kwargs)

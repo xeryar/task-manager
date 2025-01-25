@@ -35,7 +35,7 @@ class Task(BaseModel):
     """
 
     project = models.ForeignKey("task.Project", on_delete=models.CASCADE, related_name="project_tasks")
-    assigned_to = models.ForeignKey("user.UserProfile", on_delete=models.CASCADE, related_name="user_tasks", blank=True, null=True)
+    assigned_to = models.ForeignKey("user.UserProfile", on_delete=models.SET_NULL, related_name="user_tasks", blank=True, null=True)
 
     title = models.CharField(max_length=255)
     due_date = models.DateTimeField()

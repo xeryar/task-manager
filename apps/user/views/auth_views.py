@@ -24,7 +24,7 @@ class RegisterApiView(views.APIView):
             return Response(
                 {
                     "message": "Success",
-                    "message": "User registered successfully! Please verify your email to activate your account.",
+                    "message": "User registered successfully! Please verify via OTP sent to your email to activate your account.",
                 },
                 status=status.HTTP_201_CREATED,
             )

@@ -67,7 +67,6 @@ class OTPVerificationAPIViewSet(viewsets.ViewSet):
         if form.is_valid():
             form.save()
             return make_success_response(message="OTP verified successfully.")
-
         return make_error_response(data=form.errors)
 
     def resend_otp(self, request, *args, **kwargs):
@@ -75,5 +74,4 @@ class OTPVerificationAPIViewSet(viewsets.ViewSet):
         if form.is_valid():
             form.save()
             return make_success_response(message="OTP resent successfully.")
-
         return make_error_response(data=form.errors)

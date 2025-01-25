@@ -41,10 +41,7 @@ class TaskViewSet(ModelViewSet):
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        request_user = request.user
-        request_user_role = request_user.role.name.lower()
-
-        form = TaskForm(request.data, initial={"user_role": request_user_role})
+        form = TaskForm(request.data)
         if form.is_valid():
             task = form.save()
             serializer = self.get_serializer(task)
@@ -60,12 +57,10 @@ class TaskViewSet(ModelViewSet):
 
         if request_data.get("status") == "completed" and request_user_role != "manager":
             return make_forbidden_response(message="You do not have permission to mark a task as completed.")
-        if request_data.get("assigned_to") and request_user_role not in ["admin", "manager"]:
-            return make_forbidden_response(message="You do not have permission to assign a task to a user.")
-        if instance.assigned_to and request_user_role not in ["admin", "manager"] and instance.assigned_to != request_user:
+        if request_user_role not in ["admin", "manager"] and instance.assigned_to_id != request_user.id:
             return make_forbidden_response(message="You do not have permission to update this task.")
 
-        form = TaskForm(request.data, instance=instance)
+        form = TaskForm(request.data, instance=instance, initial={"user_role": request_user_role})
         if form.is_valid():
             task = form.save()
             serializer = self.get_serializer(task)

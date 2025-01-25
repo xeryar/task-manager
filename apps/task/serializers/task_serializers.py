@@ -47,4 +47,6 @@ class TaskSerializer(BaseModelSerializer):
         self._context = kwargs.get("context", {})
         if self._context.get("remove_project", False):
             self.fields.pop("project")
+        if self._context.get("get_project", False):
+            self.fields["project"] = ProjectSerializer(read_only=True)
         super().__init__(*args, **kwargs)

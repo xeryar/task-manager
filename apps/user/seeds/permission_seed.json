@@ -1,0 +1,112 @@
+[
+    {
+        "model": "user.Permission",
+        "pk": 1,
+        "fields": {
+            "name": "View Projects",
+            "context_value": "project",
+            "description": "View all Projects",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 2,
+        "fields": {
+            "name": "View One Project",
+            "context_value": "project",
+            "description": "View a single Project",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 3,
+        "fields": {
+            "name": "Add Project",
+            "context_value": "project",
+            "description": "Add a Project",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 4,
+        "fields": {
+            "name": "Edit Project",
+            "context_value": "project",
+            "description": "Edit a Project",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 5,
+        "fields": {
+            "name": "Delete Project",
+            "context_value": "project",
+            "description": "Delete a Project",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 6,
+        "fields": {
+            "name": "View Tasks",
+            "context_value": "task",
+            "description": "View all Tasks",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 7,
+        "fields": {
+            "name": "View One Task",
+            "context_value": "task",
+            "description": "View a single Task",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 8,
+        "fields": {
+            "name": "Add Task",
+            "context_value": "task",
+            "description": "Add a Task",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 9,
+        "fields": {
+            "name": "Edit Task",
+            "context_value": "task",
+            "description": "Edit a Task",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Permission",
+        "pk": 10,
+        "fields": {
+            "name": "Delete Task",
+            "context_value": "task",
+            "description": "Delete a Task",
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    }
+]

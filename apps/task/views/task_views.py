@@ -44,6 +44,9 @@ class TaskViewSet(ModelViewSet):
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
+        request_data = request.data
+        if request_data.get("status") == "completed" and request.user.role != "manager":
+            return Response({"status": "You do not have permission to mark a task as completed."}, status=status.HTTP_403_FORBIDDEN)
         instance = self.get_object()
         form = TaskForm(request.data, instance=instance)
         if form.is_valid():

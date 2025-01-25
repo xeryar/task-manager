@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from apps.task.models.task_models import Project, Task
 from core.serializers import BaseModelSerializer, get_base_model_fields
 
@@ -13,6 +15,16 @@ class ProjectSerializer(BaseModelSerializer):
         read_only_fields = [
             "id",
         ]
+
+    def __init__(self, *args, **kwargs):
+        self._context = kwargs.get("context", {})
+        if self._context.get("get_tasks", False):
+            self.fields["total_tasks"] = serializers.IntegerField(read_only=True)
+            self.fields["pending_tasks"] = serializers.IntegerField(read_only=True)
+            self.fields["in_progress_tasks"] = serializers.IntegerField(read_only=True)
+            self.fields["completed_tasks"] = serializers.IntegerField(read_only=True)
+            self.fields["tasks"] = TaskSerializer(many=True, read_only=True, source="project_tasks")
+        super().__init__(*args, **kwargs)
 
 
 class TaskSerializer(BaseModelSerializer):

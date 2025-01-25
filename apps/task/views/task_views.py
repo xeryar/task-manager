@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.db.models import Count, Prefetch, Q
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -13,6 +14,23 @@ class ProjectViewSet(ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     http_method_names = ["get", "post", "put", "delete"]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        if self.action == "retrieve":
+            context["get_tasks"] = True
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.action == "retrieve":
+            queryset = queryset.prefetch_related(Prefetch("project_tasks", queryset=Task.objects.all().order_by("-id"))).annotate(
+                total_tasks=Count("project_tasks"),
+                pending_tasks=Count("project_tasks", filter=Q(project_tasks__status="pending")),
+                in_progress_tasks=Count("project_tasks", filter=Q(project_tasks__status="in_progress")),
+                completed_tasks=Count("project_tasks", filter=Q(project_tasks__status="completed")),
+            )
+        return queryset
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):

@@ -57,9 +57,9 @@ class TaskForm(forms.ModelForm):
         return cleaned_data
 
     def clean_due_date(self):
-        due_date = self.cleaned_data.get("due_date")
+        due_date = convert_any_datetime_to_utc(self.cleaned_data.get("due_date"))  # type: ignore
         if self.instance and self.instance.is_completed:
             return due_date
-        if due_date and convert_any_datetime_to_utc(due_date) < get_current_utc_datetime():
+        if due_date and due_date < get_current_utc_datetime():
             raise forms.ValidationError("The due date cannot be in the past.")
         return due_date

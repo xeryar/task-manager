@@ -32,12 +32,17 @@ class TaskForm(forms.ModelForm):
             "due_date",
             "priority",
             "status",
+            "assigned_to",
             "description",
         ]
 
     def __init__(self, *args, **kwargs):
+        self._initial = kwargs.get("initial", {})
         self.instance = kwargs.get("instance", None)
         super().__init__(*args, **kwargs)
+        user_role = self._initial.get("user_role", None)
+        if user_role and user_role not in ["admin", "manager"]:
+            self.fields.pop("assigned_to")
 
     def clean_status(self):
         status = self.cleaned_data.get("status")

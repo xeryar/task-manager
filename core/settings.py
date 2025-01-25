@@ -44,6 +44,7 @@ except:
 # ---------------------------------------------------------------------------- #
 ACCESS_TOKEN_VALIDITY = int(config("ACCESS_TOKEN_VALIDITY")) if config("ACCESS_TOKEN_VALIDITY") else 60
 REFRESH_TOKEN_VALIDITY = int(config("REFRESH_TOKEN_VALIDITY")) if config("REFRESH_TOKEN_VALIDITY") else 1
+AUTH_USER_MODEL = "user.UserProfile"
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=ACCESS_TOKEN_VALIDITY),
@@ -110,6 +111,9 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
+    # system
+    "apps.user",
+    "apps.task",
 ]
 if DEBUG:
     INSTALLED_APPS += [
@@ -137,9 +141,9 @@ if DEBUG:
 #                                REST_FRAMEWORK                                #
 # ---------------------------------------------------------------------------- #
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_PERMISSION_CLASSES": ["custom.custom_permissions.IsAuthenticated"],
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 50,
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
@@ -207,4 +211,25 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+]
+
+# ---------------------------------------------------------------------------- #
+#                              EMAIL CONFIGURATION                             #
+# ---------------------------------------------------------------------------- #
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = "Task Manager <no-reply@gmail.com>"
+
+
+# ---------------------------------------------------------------------------- #
+#                                   FIXTURES                                   #
+# ---------------------------------------------------------------------------- #
+FIXTURE_DIRS = [
+    BASE_DIR / "seeds",
+    BASE_DIR / "apps" / "user" / "seeds",
 ]

@@ -1,5 +1,5 @@
 from django.db import transaction
-from rest_framework import status, views
+from rest_framework import status, views, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from apps.user.forms.auth_forms import UserRegistrationForm
+from apps.user.forms.otp_forms import OTPVerificationForm, ResendOTPForm
 from apps.user.models.user_models import UserProfile
 
 
@@ -57,3 +58,35 @@ class TokenRefreshApiView(TokenRefreshView):
 
     def post(self, request, *args, **kwargs) -> Response:
         return super().post(request, *args, **kwargs)
+
+
+class OTPVerificationAPIViewSet(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
+    def verify_otp(self, request, *args, **kwargs):
+        form = OTPVerificationForm(request.data)
+        if form.is_valid():
+            form.save()
+            return Response(
+                {
+                    "status": "Success",
+                    "message": "Your account is now verified! Please login to continue.",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        return Response({"status": "Failed", "errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    def resend_otp(self, request, *args, **kwargs):
+        form = ResendOTPForm(request.data)
+        if form.is_valid():
+            form.save()
+            return Response(
+                {
+                    "status": "Success",
+                    "message": "A new OTP has been sent to your email address.",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        return Response({"status": "Failed", "errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)

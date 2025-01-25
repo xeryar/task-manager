@@ -1,4 +1,5 @@
 from django.db import transaction
+from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -53,7 +54,9 @@ class ProjectViewSet(ModelViewSet):
 class TaskViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    filter_backends = [TaskFilterBackend]
+    filter_backends = [TaskFilterBackend, OrderingFilter]
+    ordering_fields = ["id", "title", "due_date", "priority", "status"]
+    ordering = ["-id"]
     http_method_names = ["get", "post", "put", "delete"]
 
     @transaction.atomic

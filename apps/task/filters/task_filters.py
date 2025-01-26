@@ -11,8 +11,9 @@ class TaskFilter(filters.BaseFilterBackend):
         priorities = request.query_params.get("priorities")
         statuses = request.query_params.get("statuses")
         projects = request.query_params.get("projects")
-        assigned_to_ids = request.query_params.get("assigned_to_ids")
         get_unassigned_tasks = request.query_params.get("get_unassigned_tasks")
+        assigned_to_ids = request.query_params.get("assigned_to_ids")
+        is_pending_approval = request.query_params.get("is_pending_approval")
 
         q_filter = Q()
 
@@ -38,6 +39,11 @@ class TaskFilter(filters.BaseFilterBackend):
             projects = json.loads(projects)
             projects = [int(project) for project in projects]
             q_filter &= Q(project__in=projects)
+
+        if is_pending_approval:
+            is_pending_approval = bool(is_pending_approval)
+            if is_pending_approval:
+                q_filter &= Q(is_pending_approval=True)
 
         if get_unassigned_tasks:
             get_unassigned_tasks = bool(get_unassigned_tasks)

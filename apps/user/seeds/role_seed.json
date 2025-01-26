@@ -1,0 +1,32 @@
+[
+  {
+    "model": "user.Role",
+    "pk": 1,
+    "fields": {
+      "name": "Admin",
+      "slug": "admin",
+      "created_at": "2001-11-20T00:00:00Z",
+      "updated_at": "2001-11-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "user.Role",
+    "pk": 2,
+    "fields": {
+      "name": "Manager",
+      "slug": "manager",
+      "created_at": "2001-11-20T00:00:00Z",
+      "updated_at": "2001-11-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "user.Role",
+    "pk": 3,
+    "fields": {
+      "name": "User",
+      "slug": "user",
+      "created_at": "2001-11-20T00:00:00Z",
+      "updated_at": "2001-11-20T00:00:00Z"
+    }
+  }
+]

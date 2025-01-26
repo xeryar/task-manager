@@ -1,0 +1,236 @@
+[
+    {
+        "model": "user.Resource",
+        "pk": 1,
+        "fields": {
+            "name": "Register User",
+            "description": "Register a new user account",
+            "regex": "^/register/$",
+            "method": "post",
+            "permission": null,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 2,
+        "fields": {
+            "name": "Login User",
+            "description": "Signin an existing user account",
+            "regex": "^/login/$",
+            "method": "post",
+            "permission": null,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 3,
+        "fields": {
+            "name": "Refresh Token",
+            "description": "Refresh a token",
+            "regex": "^/token/refresh/$",
+            "method": "post",
+            "permission": null,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 4,
+        "fields": {
+            "name": "Logout User",
+            "description": "Logout a signed in user",
+            "regex": "^/logout/$",
+            "method": "post",
+            "permission": null,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 5,
+        "fields": {
+            "name": "Verify OTP",
+            "description": "Verify a user OTP",
+            "regex": "^/verify-otp/$",
+            "method": "post",
+            "permission": null,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 6,
+        "fields": {
+            "name": "Resend OTP",
+            "description": "Resend an OTP to a user email",
+            "regex": "^/resend-otp/$",
+            "method": "post",
+            "permission": null,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 7,
+        "fields": {
+            "name": "Get All Projects",
+            "description": "Retrieve all projects",
+            "regex": "^/projects/$",
+            "method": "get",
+            "permission": 1,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 8,
+        "fields": {
+            "name": "Get One Project",
+            "description": "Retrieve a single project",
+            "regex": "^/projects/[0-9]+/$",
+            "method": "get",
+            "permission": 2,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 9,
+        "fields": {
+            "name": "Create Project",
+            "description": "Create a new project",
+            "regex": "^/projects/$",
+            "method": "post",
+            "permission": 3,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 10,
+        "fields": {
+            "name": "Edit Project",
+            "description": "Edit an existing project",
+            "regex": "^/projects/[0-9]+/$",
+            "method": "put",
+            "permission": 4,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 11,
+        "fields": {
+            "name": "Delete Project",
+            "description": "Delete a project",
+            "regex": "^/projects/[0-9]+/$",
+            "method": "delete",
+            "permission": 5,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 12,
+        "fields": {
+            "name": "Get All Tasks",
+            "description": "Retrieve all tasks",
+            "regex": "^/tasks/$",
+            "method": "get",
+            "permission": 6,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 13,
+        "fields": {
+            "name": "Get One Task",
+            "description": "Retrieve a single task",
+            "regex": "^/tasks/[0-9]+/$",
+            "method": "get",
+            "permission": 7,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 14,
+        "fields": {
+            "name": "Create Task",
+            "description": "Create a new task",
+            "regex": "^/tasks/$",
+            "method": "post",
+            "permission": 8,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 15,
+        "fields": {
+            "name": "Edit Task",
+            "description": "Edit an existing task",
+            "regex": "^/tasks/[0-9]+/$",
+            "method": "put",
+            "permission": 9,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 16,
+        "fields": {
+            "name": "Delete Task",
+            "description": "Delete a task",
+            "regex": "^/tasks/[0-9]+/$",
+            "method": "delete",
+            "permission": 10,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 17,
+        "fields": {
+            "name": "Approve Task",
+            "description": "Approve a task",
+            "regex": "^/tasks/[0-9]+/approval/$",
+            "method": "post",
+            "permission": 11,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 18,
+        "fields": {
+            "name": "Revoke Task Approval",
+            "description": "Revoke Approval of a task",
+            "regex": "^/tasks/[0-9]+/revoke-approval/$",
+            "method": "post",
+            "permission": 11,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    }
+]

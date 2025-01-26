@@ -1,4 +1,6 @@
+from django.core.cache import cache
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
@@ -9,6 +11,7 @@ from apps.task.forms.task_forms import ProjectForm, TaskForm
 from apps.task.helpers.task_helpers import validate_task_access
 from apps.task.models.task_models import Project, Task
 from apps.task.serializers.task_serializers import ProjectSerializer, TaskSerializer
+from tasks.scheduled_tasks import save_task_to_db
 from utils.response_utils import (
     make_created_response,
     make_error_response,
@@ -125,15 +128,40 @@ class TaskViewSet(ModelViewSet):
             return make_forbidden_response(message="You cannot delete a completed task.")
         return super().destroy(request, *args, **kwargs)
 
-    @action(detail=False, methods=["post"], url_path="approvals")
-    def task_approvals(self, request):
-        request_data = request.data
-        approved_tasks = request_data.get("approved_tasks", [])
-        rejected_tasks = request_data.get("rejected_tasks", [])
-        if not approved_tasks and not rejected_tasks:
-            return make_error_response(message="Please provide approved_tasks or rejected_tasks.")
-        if approved_tasks:
-            Task.objects.filter(id__in=approved_tasks).update(is_pending_approval=False, status="completed")
-        if rejected_tasks:
-            Task.objects.filter(id__in=rejected_tasks).update(is_pending_approval=False)
-        return make_created_response(message="Task approvals updated successfully.")
+    @transaction.atomic
+    @action(detail=True, methods=["post"], url_path="approval")
+    def approve_task(self, request, *args, **kwargs):
+        task_id = kwargs["pk"]
+        task = get_object_or_404(Task, id=task_id, is_pending_approval=True)
+
+        if task.status == "completed":
+            return make_error_response(message="Task is already completed.")
+        if task.status != "in_progress":
+            return make_error_response(message="Task must be in progress to approve.")
+
+        task_in_cache = cache.get(f"task:{task_id}")
+        if task_in_cache:
+            return make_error_response(message="Task approval is already in progress. Please wait for the approval.")
+        task.is_pending_approval = False
+        task.status = "completed"
+        cache.set(
+            f"task:{task_id}",
+            {"id": task.id, "title": task.title, "status": task.status, "is_pending_approval": task.is_pending_approval},  # type: ignore
+            timeout=350,
+        )
+        save_task_to_db.apply_async((task_id,), countdown=300)
+        return make_created_response(message="Task approved successfully.")
+
+    @transaction.atomic
+    @action(detail=True, methods=["post"], url_path="revoke-approval")
+    def revoke_task_approval(self, request, *args, **kwargs):
+        task_id = kwargs["pk"]
+        task_data = cache.get(f"task:{task_id}")
+        if task_data:
+            task = get_object_or_404(Task, id=task_id)
+            task.status = "in_progress"
+            task.is_pending_approval = False
+            task.save()
+            cache.delete(f"task:{task_id}")
+            return make_created_response(message="Task approval revoked successfully.")
+        return make_error_response(message="Task approval not found.")

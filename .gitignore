@@ -8,3 +8,5 @@ allstatic
 *.prof
 my_lab.py
 profiling
+celerybeat-schedule.bak
+celerybeat-schedule.dir

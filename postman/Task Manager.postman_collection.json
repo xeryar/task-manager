@@ -1,0 +1,657 @@
+{
+	"info": {
+		"_postman_id": "e05cf137-6021-49cc-88a8-a084962be8eb",
+		"name": "Task Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32544281"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - refresh and access\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('refresh');\r",
+									"    pm.expect(responseData).to.have.property('access');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Refresh token should not be empty\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.refresh).to.exist.and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Access token should not be empty\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.access).to.exist.and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"access_token\", jsonData.access);\r",
+									"pm.environment.set(\"refresh_token\", jsonData.refresh);\r",
+									"pm.collectionVariables.set(\"refresh_token\", jsonData.refresh)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sherry@example.com\",\r\n    \"password\": \"password123\"\r\n}\r\n\r\n// {\r\n//     \"email\": \"testuser@example.com\",\r\n//     \"password\": \"password123\"\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"sherry@example.com\",\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"password\": \"password123\",\r\n  \"confirm_password\": \"password123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/register/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.clear()\r",
+									"pm.environment.set(\"access_token\", \"\")\r",
+									"pm.environment.set(\"refresh_token\", \"\")"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "refresh",
+								"value": "{{{{refresh_token}}}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/logout/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"logout",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - refresh and access\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('refresh');\r",
+									"    pm.expect(responseData).to.have.property('access');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Refresh token should not be empty\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.refresh).to.exist.and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Access token should not be empty\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.access).to.exist.and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"access_token\", jsonData.access);\r",
+									"pm.environment.set(\"refresh_token\", jsonData.refresh);\r",
+									"pm.collectionVariables.set(\"refresh_token\", jsonData.refresh)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/token/refresh/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"token",
+								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sherry@example.com\",\r\n    \"otp\": 123\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/verify-otp/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"verify-otp",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend OTP",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"sherry@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/resend-otp/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"resend-otp",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task App",
+			"item": [
+				{
+					"name": "Project",
+					"item": [
+						{
+							"name": "Create Project",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Project\",\r\n    \"description\": \"Test Description\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/projects/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"projects",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Projects",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/projects/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"projects",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get One Project",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/projects/1/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"projects",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Project",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Project\",\r\n    \"description\": \"Test Description Updated\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/projects/1/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"projects",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Project",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/projects/4/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"projects",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Task",
+					"item": [
+						{
+							"name": "Create Task",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"project\": 1,\r\n    \"title\": \"Task 1\",\r\n    \"due_date\": \"2025-07-27T07:17:54.260105Z\",\r\n    \"priority\": \"medium\",\r\n    \"description\": \"Task 1 Description\",\r\n    \"assigned_to\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/tasks/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"tasks",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Tasks",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/tasks/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"tasks",
+										""
+									],
+									"query": [
+										{
+											"key": "title",
+											"value": "task 1",
+											"disabled": true
+										},
+										{
+											"key": "due_date",
+											"value": "2025-07-27",
+											"disabled": true
+										},
+										{
+											"key": "priorities",
+											"value": "[\"low\",\"high\"]",
+											"disabled": true
+										},
+										{
+											"key": "statuses",
+											"value": "[\"completed\",\"in_progress\"]",
+											"disabled": true
+										},
+										{
+											"key": "projects",
+											"value": "[1,2]",
+											"disabled": true
+										},
+										{
+											"key": "assigned_to_ids",
+											"value": "[2]",
+											"disabled": true
+										},
+										{
+											"key": "get_unassigned_tasks",
+											"value": "True",
+											"disabled": true
+										},
+										{
+											"key": "ordering",
+											"value": "status",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get One Task",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/tasks/6/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"tasks",
+										"6",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Task",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"project\": 1,\r\n    \"title\": \"Task 1\",\r\n    \"due_date\": \"2025-07-27T07:17:54.260105Z\",\r\n    \"priority\": \"medium\",\r\n    \"status\": \"in_progress\",\r\n    \"description\": \"Task 1 Description\",\r\n    \"assigned_to\": 2,\r\n    \"is_pending_approval\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/tasks/21/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"tasks",
+										"21",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Task",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/tasks/8/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"tasks",
+										"8",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Task Approval",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/tasks/7/approval/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"tasks",
+										"7",
+										"approval",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Revoke Task Approval",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/tasks/9/revoke-approval/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"tasks",
+										"9",
+										"revoke-approval",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "refresh_token",
+			"value": ""
+		}
+	]
+}

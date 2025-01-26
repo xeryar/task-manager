@@ -75,6 +75,18 @@ Start the Django development server:
 py manage.py runserver
 ```
 
+### All Commands to run in the terminal at one place
+```bash
+py -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+.\commands\reset_db.py
+redis-server
+celery -A core worker --pool=solo --loglevel=info
+celery -A core beat --loglevel=info
+py manage.py run_task_deletion_scheduler
+py manage.py runserver
+```
 ---
 
 ## 🌐 How to Use the Application

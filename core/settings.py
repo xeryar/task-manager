@@ -26,6 +26,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEBUG = True if config("ENV") != "production" else False  #! SECURITY WARNING: don't run with debug turned on in production!
 ROOT_URLCONF = "core.urls"
 WSGI_APPLICATION = "core.wsgi.application"
+TASK_DELETION_PERIOD_DAYS = int(config("TASK_DELETION_PERIOD_DAYS"))
+CELERY_TASK_DELETION_INTERVAL_DAYS = 7
 
 try:
     SECRET_KEY = config("APP_KEY")  #! SECURITY WARNING: keep the secret key used in production secret!
@@ -111,6 +113,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
+    "django_celery_beat",
     "django_celery_results",
     # system
     "apps.user",

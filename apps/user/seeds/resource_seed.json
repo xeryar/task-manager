@@ -213,7 +213,20 @@
         "fields": {
             "name": "Approve Task",
             "description": "Approve a task",
-            "regex": "^/tasks/approvals/$",
+            "regex": "^/tasks/[0-9]+/approval/$",
+            "method": "post",
+            "permission": 11,
+            "created_at": "2001-11-20T00:00:00Z",
+            "updated_at": "2001-11-20T00:00:00Z"
+        }
+    },
+    {
+        "model": "user.Resource",
+        "pk": 18,
+        "fields": {
+            "name": "Revoke Task Approval",
+            "description": "Revoke Approval of a task",
+            "regex": "^/tasks/[0-9]+/revoke-approval/$",
             "method": "post",
             "permission": 11,
             "created_at": "2001-11-20T00:00:00Z",

@@ -228,6 +228,27 @@ DEFAULT_FROM_EMAIL = "Task Manager <no-reply@gmail.com>"
 
 
 # ---------------------------------------------------------------------------- #
+#                                     REDIS                                    #
+# ---------------------------------------------------------------------------- #
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # Redis database 1
+    }
+}
+
+# ---------------------------------------------------------------------------- #
+#                                    CELERY                                    #
+# ---------------------------------------------------------------------------- #
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"  # Redis database 0
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+
+# Celery Result Backend
+CELERY_RESULT_BACKEND = "django-db"
+
+
+# ---------------------------------------------------------------------------- #
 #                                   FIXTURES                                   #
 # ---------------------------------------------------------------------------- #
 FIXTURE_DIRS = [

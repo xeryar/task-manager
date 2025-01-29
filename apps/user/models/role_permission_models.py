@@ -18,6 +18,9 @@ class Permission(BaseModel):
     class Meta:
         app_label = "user"
 
+    def __str__(self):
+        return self.name
+
 
 class Role(BaseModel):
     """
@@ -63,6 +66,9 @@ class Resource(BaseModel):
     class Meta:
         app_label = "user"
 
+    def __str__(self):
+        return self.name
+
 
 # ---------------------------------------------------------------------------- #
 #                                     MAPS                                     #
@@ -84,3 +90,6 @@ class RolePermission(BaseModel):
     class Meta:
         app_label = "user"
         db_table = "user_role_permission"
+
+    def __str__(self):
+        return f"{self.role} - {self.permission}"
